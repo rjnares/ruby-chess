@@ -2,7 +2,7 @@
 
 require_relative '../lib/board'
 
-describe Board do
+RSpec.describe Board do
   let(:grid) { board.instance_variable_get(:@grid) }
   subject(:board) { described_class.new }
 
@@ -13,6 +13,22 @@ describe Board do
 
     it 'creates a grid with 8 columns' do
       expect(grid.all? { |row| row.length == 8 }).to eq(true)
+    end
+
+    context 'when pawns are created' do
+      it 'adds black pawns to row 1' do
+        result = grid[1].all? do |val|
+          val.instance_of?(Pawn) && val.color == :black
+        end
+        expect(result).to eq(true)
+      end
+
+      it 'adds white pawns to row 6' do
+        result = grid[6].all? do |val|
+          val.instance_of?(Pawn) && val.color == :gray
+        end
+        expect(result).to eq(true)
+      end
     end
   end
 

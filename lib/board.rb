@@ -3,11 +3,15 @@
 require 'colorize'
 
 require_relative 'rules'
+require_relative 'pawn'
 
 # Class for a chess board
 class Board
   def initialize
     @grid = Array.new(Rules::NUM_RANKS) { Array.new(Rules::NUM_FILES) }
+
+    create_pawns(@grid[Rules::WHITE_PAWNS_START_ROW], Rules::WHITE)
+    create_pawns(@grid[Rules::BLACK_PAWNS_START_ROW], Rules::BLACK)
   end
 
   def display
@@ -18,6 +22,10 @@ class Board
   private
 
   attr_reader :grid
+
+  def create_pawns(row, color)
+    row.each_index { |idx| row[idx] = Pawn.new(color) }
+  end
 
   def display_file_labels
     file_labels = [' '] + Rules::FILES
