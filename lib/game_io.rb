@@ -18,10 +18,10 @@ module GameIO
     print 'Enter a position on the grid to see available moves: '
   end
 
-  def position_out_of_bounds(position)
+  def position_out_of_bounds
     puts <<~HEREDOC
 
-      Position [#{position}] is out of bounds, please try again...
+      Position is out of bounds, please try again...
     HEREDOC
   end
 

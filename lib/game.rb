@@ -40,7 +40,7 @@ class Game
   def out_of_bounds?(position)
     return false unless board.out_of_bounds?(position)
 
-    position_out_of_bounds(position)
+    position_out_of_bounds
     true
   end
 
