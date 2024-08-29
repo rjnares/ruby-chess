@@ -19,6 +19,19 @@ class Board
     display_rows
   end
 
+  def out_of_bounds?(position)
+    Rules.position_to_row_column(position).nil?
+  end
+
+  def empty_position?(position)
+    row_col = Rules.position_to_row_column(position)
+    return true if row_col.nil?
+
+    row = row_col[0]
+    col = row_col[1]
+    grid[row][col].nil?
+  end
+
   private
 
   attr_reader :grid
@@ -28,6 +41,7 @@ class Board
   end
 
   def display_file_labels
+    puts
     file_labels = [' '] + Rules::FILES
     file_labels.each { |val| print " #{val} " }
     puts
