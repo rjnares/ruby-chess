@@ -21,26 +21,22 @@ module GameIO
   def position_out_of_bounds
     puts <<~HEREDOC
 
-      Position is out of bounds, please try again...
+      Position out of bounds, please try again...
     HEREDOC
   end
 
   def position_empty(position)
     puts <<~HEREDOC
 
-      Position [#{position}] is empty, please try again...
+      Position '#{position}' is empty, please try again...
     HEREDOC
   end
 
-  def grid_position
+  def display_moves
     loop do
       enter_grid_position
       position = gets.chomp.downcase
-      return position if valid_position?(position)
+      return board.available_moves(position) if valid_position?(position)
     end
-  end
-
-  def display_moves
-    grid_position
   end
 end

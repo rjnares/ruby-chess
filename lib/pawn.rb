@@ -13,4 +13,9 @@ class Pawn
   def initialize(color)
     @color = color
   end
+
+  def available_moves(board, row, column)
+    # Stubbing implementation for now
+    [row, column]
+  end
 end

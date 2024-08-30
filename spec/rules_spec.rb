@@ -69,6 +69,36 @@ RSpec.describe Rules do
     expect(described_class::FILE_TO_COLUMN_MAP).to eq(expected)
   end
 
+  describe '::out_of_bounds?' do
+    context 'when position is not length 2' do
+      let(:position) { 'aaa' }
+      it 'returns true' do
+        expect(described_class.out_of_bounds?(position)).to eq(true)
+      end
+    end
+
+    context 'when file does not exist' do
+      let(:position) { 'z1' }
+      it 'returns true' do
+        expect(described_class.out_of_bounds?(position)).to eq(true)
+      end
+    end
+
+    context 'when rank does not exist' do
+      let(:position) { 'a0' }
+      it 'returns true' do
+        expect(described_class.out_of_bounds?(position)).to eq(true)
+      end
+    end
+
+    context 'when position exists' do
+      let(:position) { 'a3' }
+      it 'returns false' do
+        expect(described_class.out_of_bounds?(position)).to eq(false)
+      end
+    end
+  end
+
   describe '::position_to_row_column' do
     context 'when position is not length 2' do
       let(:position) { 'aaa' }

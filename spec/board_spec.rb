@@ -50,7 +50,7 @@ RSpec.describe Board do
     end
   end
 
-  describe '#out_of_bounds?' do
+  describe '#empty?' do
     let(:position) { 'position' }
 
     context 'when Rules::position_to_row_column returns nil' do
@@ -59,31 +59,7 @@ RSpec.describe Board do
       end
 
       it 'returns true' do
-        expect(board.out_of_bounds?(position)).to eq(true)
-      end
-    end
-
-    context 'when Rules::position_to_row_column does not return nil' do
-      before do
-        allow(rules).to receive(:position_to_row_column).and_return([1, 2])
-      end
-
-      it 'returns false' do
-        expect(board.out_of_bounds?(position)).to eq(false)
-      end
-    end
-  end
-
-  describe '#empty_position?' do
-    let(:position) { 'position' }
-
-    context 'when Rules::position_to_row_column returns nil' do
-      before do
-        allow(rules).to receive(:position_to_row_column)
-      end
-
-      it 'returns true' do
-        expect(board.empty_position?(position)).to eq(true)
+        expect(board.empty?(position)).to eq(true)
       end
     end
 
@@ -101,7 +77,7 @@ RSpec.describe Board do
         end
 
         it 'returns true' do
-          expect(board.empty_position?(position)).to eq(true)
+          expect(board.empty?(position)).to eq(true)
         end
       end
 
@@ -111,8 +87,52 @@ RSpec.describe Board do
         end
 
         it 'returns false' do
-          expect(board.empty_position?(position)).to eq(false)
+          expect(board.empty?(position)).to eq(false)
         end
+      end
+    end
+  end
+
+  describe '#available_moves' do
+    let(:position) { 'position' }
+
+    context 'when Rules::position_to_row_column returns nil' do
+      before do
+        allow(rules).to receive(:position_to_row_column)
+      end
+
+      it 'returns an empty array' do
+        expect(board.available_moves(position)).to eq([])
+      end
+    end
+
+    context 'when position is empty' do
+      let(:row) { 1 }
+      let(:column) { 4 }
+
+      before do
+        allow(rules).to receive(:position_to_row_column).and_return([row, column])
+        grid[row][column] = nil
+      end
+
+      it 'returns an empty array' do
+        expect(board.available_moves(position)).to eq([])
+      end
+    end
+
+    context 'when position is not empty' do
+      let(:row) { 1 }
+      let(:column) { 4 }
+      let(:pawn) { instance_double('Pawn') }
+
+      before do
+        allow(rules).to receive(:position_to_row_column).and_return([row, column])
+        grid[row][column] = pawn
+      end
+
+      it 'calls #available_moves on the piece once' do
+        expect(pawn).to receive(:available_moves).with(board, row, column).once
+        board.available_moves(position)
       end
     end
   end

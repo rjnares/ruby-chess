@@ -38,6 +38,18 @@ module Rules
     'h' => 7
   }.freeze
 
+  def self.out_of_bounds?(position)
+    return true if position.length != 2
+
+    file = position[0]
+    rank = position[1]
+
+    row = RANK_TO_ROW_MAP[rank]
+    column = FILE_TO_COLUMN_MAP[file]
+
+    row.nil? || column.nil?
+  end
+
   def self.position_to_row_column(position)
     return if position.length != 2
 

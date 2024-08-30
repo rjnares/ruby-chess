@@ -24,7 +24,8 @@ class Game
 
   def play_turns
     loop do
-      display_moves
+      moves = display_moves
+      puts "Moves: #{moves}"
     end
   end
 
@@ -32,22 +33,16 @@ class Game
     # Currently, a valid position is in bounds and is non-empty. In the future, there
     # may need to be logic that looks for other higher priority conditions (e.g. check) which
     # makes it so a given position is not valid and the user must select another
-    return false if out_of_bounds?(position) || empty_position?(position)
+    if Rules.out_of_bounds?(position)
+      position_out_of_bounds
+      return false
+    end
 
-    true
-  end
+    if board.empty?(position)
+      position_empty(position)
+      return false
+    end
 
-  def out_of_bounds?(position)
-    return false unless board.out_of_bounds?(position)
-
-    position_out_of_bounds
-    true
-  end
-
-  def empty_position?(position)
-    return false unless board.empty_position?(position)
-
-    position_empty(position)
     true
   end
 end

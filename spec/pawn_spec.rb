@@ -3,6 +3,7 @@
 require_relative '../lib/pawn'
 
 RSpec.describe Pawn do
+  let(:board) { instance_double('Board') }
   let(:white_color) { :white }
   subject(:white_pawn) { described_class.new(white_color) }
 
@@ -40,6 +41,16 @@ RSpec.describe Pawn do
     it 'returns the colorized unicode string' do
       stub_const("#{described_class}::UNICODE", unicode_str)
       expect(white_pawn.to_s).to eq(colorized_str)
+    end
+  end
+
+  describe '#available_moves' do
+    let(:row) { 3 }
+    let(:column) { 5 }
+
+    it 'returns a [row, column] array' do
+      result = white_pawn.available_moves(board, row, column)
+      expect(result).to eq([row, column])
     end
   end
 end
