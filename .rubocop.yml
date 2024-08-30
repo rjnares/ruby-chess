@@ -1,2 +1,2 @@
 Metrics/BlockLength:
-  AllowedMethods: ['describe']
+  AllowedMethods: ['describe', 'context']

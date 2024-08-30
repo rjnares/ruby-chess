@@ -27,6 +27,17 @@ module Rules
     '1' => 7
   }.freeze
 
+  ROW_TO_RANK_MAP = {
+    0 => '8',
+    1 => '7',
+    2 => '6',
+    3 => '5',
+    4 => '4',
+    5 => '3',
+    6 => '2',
+    7 => '1'
+  }.freeze
+
   FILE_TO_COLUMN_MAP = {
     'a' => 0,
     'b' => 1,
@@ -36,6 +47,17 @@ module Rules
     'f' => 5,
     'g' => 6,
     'h' => 7
+  }.freeze
+
+  COLUMN_TO_FILE_MAP = {
+    0 => 'a',
+    1 => 'b',
+    2 => 'c',
+    3 => 'd',
+    4 => 'e',
+    5 => 'f',
+    6 => 'g',
+    7 => 'h'
   }.freeze
 
   def self.out_of_bounds?(position)
@@ -62,5 +84,14 @@ module Rules
     return if row.nil? || column.nil?
 
     [row, column]
+  end
+
+  def self.row_column_to_position(row, column)
+    file = COLUMN_TO_FILE_MAP[column]
+    rank = ROW_TO_RANK_MAP[row]
+
+    return if file.nil? || rank.nil?
+
+    file + rank
   end
 end

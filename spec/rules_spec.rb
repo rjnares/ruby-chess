@@ -54,6 +54,21 @@ RSpec.describe Rules do
     expect(described_class::RANK_TO_ROW_MAP).to eq(expected)
   end
 
+  it 'returns map of rows to ranks' do
+    expected = {
+      0 => '8',
+      1 => '7',
+      2 => '6',
+      3 => '5',
+      4 => '4',
+      5 => '3',
+      6 => '2',
+      7 => '1'
+    }
+
+    expect(described_class::ROW_TO_RANK_MAP).to eq(expected)
+  end
+
   it 'returns map of files to columns' do
     expected = {
       'a' => 0,
@@ -67,6 +82,21 @@ RSpec.describe Rules do
     }
 
     expect(described_class::FILE_TO_COLUMN_MAP).to eq(expected)
+  end
+
+  it 'returns map of columns to files' do
+    expected = {
+      0 => 'a',
+      1 => 'b',
+      2 => 'c',
+      3 => 'd',
+      4 => 'e',
+      5 => 'f',
+      6 => 'g',
+      7 => 'h'
+    }
+
+    expect(described_class::COLUMN_TO_FILE_MAP).to eq(expected)
   end
 
   describe '::out_of_bounds?' do
@@ -130,6 +160,42 @@ RSpec.describe Rules do
 
       it 'returns a corresponding [row, column] array' do
         expect(described_class.position_to_row_column(position)).to eq(expected)
+      end
+    end
+  end
+
+  describe '::row_column_to_position' do
+    context 'when column is out of bounds' do
+      let(:column) { 8 }
+      it 'returns nil' do
+        result = described_class.row_column_to_position(0, column)
+        expect(result).to be_nil
+      end
+    end
+
+    context 'when row is out of bounds' do
+      let(:row) { 8 }
+      it 'returns nil' do
+        result = described_class.row_column_to_position(row, 0)
+        expect(result).to be_nil
+      end
+    end
+
+    context 'when row and column are out of bounds' do
+      let(:row) { 8 }
+      let(:column) { -1 }
+      it 'returns nil' do
+        result = described_class.row_column_to_position(row, column)
+        expect(result).to be_nil
+      end
+    end
+
+    context 'when row and column are in bounds' do
+      let(:row) { 0 }
+      let(:column) { 7 }
+      it 'returns nil' do
+        result = described_class.row_column_to_position(row, column)
+        expect(result).not_to be_nil
       end
     end
   end
