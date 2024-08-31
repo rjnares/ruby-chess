@@ -136,4 +136,47 @@ RSpec.describe Board do
       end
     end
   end
+
+  describe '#piece' do
+    let(:position) { 'position' }
+
+    context 'when position does not exist' do
+      before do
+        allow(rules).to receive(:position_to_row_column).and_return(nil)
+      end
+
+      it 'returns nil' do
+        expect(board.piece(position)).to be_nil
+      end
+    end
+
+    context 'when position exists' do
+      let(:row) { 1 }
+      let(:column) { 4 }
+
+      context 'when position is empty' do
+        before do
+          allow(rules).to receive(:position_to_row_column).and_return([row, column])
+          grid[row][column] = nil
+        end
+
+        it 'returns nil' do
+          expect(board.piece(position)).to be_nil
+        end
+      end
+
+      context 'when position has a piece' do
+        let(:pawn) { double('pawn') }
+
+        before do
+          allow(rules).to receive(:position_to_row_column).and_return([row, column])
+          grid[row][column] = pawn
+        end
+
+        it 'returns the piece' do
+          expect(board.piece(position)).to eq(pawn)
+        end
+      end
+    end
+  end
 end

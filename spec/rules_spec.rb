@@ -211,7 +211,7 @@ RSpec.describe Rules do
     context 'when piece notation is not passed' do
       it 'defaults to pawn notation' do
         result = described_class.notate_move(source, target)
-        expect(result).to eq("#{source} - #{target}")
+        expect(result).to eq("#{source}-#{target}")
       end
     end
 
@@ -220,7 +220,7 @@ RSpec.describe Rules do
 
       it 'uses the piece notation' do
         result = described_class.notate_move(piece_notation, source, target)
-        expect(result).to eq("#{piece_notation}#{source} - #{target}")
+        expect(result).to eq("#{piece_notation}#{source}-#{target}")
       end
     end
 
@@ -234,6 +234,41 @@ RSpec.describe Rules do
     context 'when target position is nil' do
       it 'returns nil' do
         result = described_class.notate_move(source, nil)
+        expect(result).to be_nil
+      end
+    end
+  end
+
+  describe '::notate_capture' do
+    let(:source) { 'source' }
+    let(:target) { 'target' }
+
+    context 'when piece notation is not passed' do
+      it 'defaults to pawn notation' do
+        result = described_class.notate_capture(source, target)
+        expect(result).to eq("#{source}x#{target}")
+      end
+    end
+
+    context 'when piece notation is passed' do
+      let(:piece_notation) { 'piece notation' }
+
+      it 'uses the piece notation' do
+        result = described_class.notate_capture(piece_notation, source, target)
+        expect(result).to eq("#{piece_notation}#{source}x#{target}")
+      end
+    end
+
+    context 'when source position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_capture(nil, target)
+        expect(result).to be_nil
+      end
+    end
+
+    context 'when target position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_capture(source, nil)
         expect(result).to be_nil
       end
     end

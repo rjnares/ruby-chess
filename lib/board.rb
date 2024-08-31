@@ -42,6 +42,16 @@ class Board
     piece.available_moves(self, row, col)
   end
 
+  def piece(position)
+    row_col = Rules.position_to_row_column(position)
+    return if row_col.nil?
+
+    row = row_col[0]
+    col = row_col[1]
+
+    grid[row][col]
+  end
+
   private
 
   attr_reader :grid

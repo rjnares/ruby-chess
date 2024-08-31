@@ -100,6 +100,12 @@ module Rules
   def self.notate_move(piece_notation = PAWN_NOTATION, source_position, target_position)
     return if source_position.nil? || target_position.nil?
 
-    "#{piece_notation}#{source_position} - #{target_position}"
+    "#{piece_notation}#{source_position}-#{target_position}"
+  end
+
+  def self.notate_capture(piece_notation = PAWN_NOTATION, source_position, target_position)
+    return if source_position.nil? || target_position.nil?
+
+    "#{piece_notation}#{source_position}x#{target_position}"
   end
 end
