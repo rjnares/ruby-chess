@@ -99,6 +99,10 @@ RSpec.describe Rules do
     expect(described_class::COLUMN_TO_FILE_MAP).to eq(expected)
   end
 
+  it 'returns pawn notation' do
+    expect(described_class::PAWN_NOTATION).to eq('')
+  end
+
   describe '::out_of_bounds?' do
     context 'when position is not length 2' do
       let(:position) { 'aaa' }
@@ -196,6 +200,41 @@ RSpec.describe Rules do
       it 'returns nil' do
         result = described_class.row_column_to_position(row, column)
         expect(result).not_to be_nil
+      end
+    end
+  end
+
+  describe '::notate_move' do
+    let(:source) { 'source' }
+    let(:target) { 'target' }
+
+    context 'when piece notation is not passed' do
+      it 'defaults to pawn notation' do
+        result = described_class.notate_move(source, target)
+        expect(result).to eq("#{source} - #{target}")
+      end
+    end
+
+    context 'when piece notation is passed' do
+      let(:piece_notation) { 'piece notation' }
+
+      it 'uses the piece notation' do
+        result = described_class.notate_move(piece_notation, source, target)
+        expect(result).to eq("#{piece_notation}#{source} - #{target}")
+      end
+    end
+
+    context 'when source position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_move(nil, target)
+        expect(result).to be_nil
+      end
+    end
+
+    context 'when target position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_move(source, nil)
+        expect(result).to be_nil
       end
     end
   end

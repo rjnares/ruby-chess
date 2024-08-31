@@ -49,46 +49,48 @@ RSpec.describe Pawn do
     context 'when pawn is white' do
       context 'when pawn is on starting row' do
         let(:row) { 6 }
+        let(:move1) { 'a2 - a3' }
+        let(:move2) { 'a2 - a4' }
 
-        context 'when both forward spaces are available' do
+        context 'when both forward positions are available' do
           before do
             allow(board).to receive(:empty?).and_return(true, true)
           end
 
-          it 'returns [[row-1, column], row-2, column]]' do
+          it 'returns both moves' do
             result = white_pawn.available_moves(board, row, column)
-            expect(result).to eq([[row - 1, column], [row - 2, column]])
+            expect(result).to eq([move1, move2])
           end
         end
 
-        context 'when only the first forward space is available' do
+        context 'when only the first forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(true, false)
           end
 
-          it 'returns [[row-1, column]]' do
+          it 'returns the first move' do
             result = white_pawn.available_moves(board, row, column)
-            expect(result).to eq([[row - 1, column]])
+            expect(result).to eq([move1])
           end
         end
 
-        context 'when only the second forward space is available' do
+        context 'when only the second forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(false, true)
           end
 
-          it 'returns []' do
+          it 'returns empty array' do
             result = white_pawn.available_moves(board, row, column)
             expect(result).to eq([])
           end
         end
 
-        context 'when no forward space is available' do
+        context 'when no forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(false, false)
           end
 
-          it 'returns []' do
+          it 'returns empty array' do
             result = white_pawn.available_moves(board, row, column)
             expect(result).to eq([])
           end
@@ -97,24 +99,25 @@ RSpec.describe Pawn do
 
       context 'when pawn is not on starting row' do
         let(:row) { 4 }
+        let(:move1) { 'a4 - a5' }
 
-        context 'when a forward space is available' do
+        context 'when the first forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(true)
           end
 
-          it 'returns [[row-1, column]]' do
+          it 'returns the first move' do
             result = white_pawn.available_moves(board, row, column)
-            expect(result).to eq([[row - 1, column]])
+            expect(result).to eq([move1])
           end
         end
 
-        context 'when a forward space is not available' do
+        context 'when a forward position is not available' do
           before do
             allow(board).to receive(:empty?).and_return(false)
           end
 
-          it 'returns []' do
+          it 'returns empty array' do
             result = white_pawn.available_moves(board, row, column)
             expect(result).to eq([])
           end
@@ -125,46 +128,48 @@ RSpec.describe Pawn do
     context 'when pawn is black' do
       context 'when pawn is on starting row' do
         let(:row) { 1 }
+        let(:move1) { 'a7 - a6' }
+        let(:move2) { 'a7 - a5' }
 
-        context 'when both forward spaces are available' do
+        context 'when both forward positions are available' do
           before do
             allow(board).to receive(:empty?).and_return(true, true)
           end
 
-          it 'returns [[row+1, column], [row+2, column]]' do
+          it 'returns both moves' do
             result = black_pawn.available_moves(board, row, column)
-            expect(result).to eq([[row + 1, column], [row + 2, column]])
+            expect(result).to eq([move1, move2])
           end
         end
 
-        context 'when only the first forward space is available' do
+        context 'when only the first forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(true, false)
           end
 
-          it 'returns [[row+1, column]]' do
+          it 'returns the first move' do
             result = black_pawn.available_moves(board, row, column)
-            expect(result).to eq([[row + 1, column]])
+            expect(result).to eq([move1])
           end
         end
 
-        context 'when only the second forward space is available' do
+        context 'when only the second forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(false, true)
           end
 
-          it 'returns []' do
+          it 'returns empty array' do
             result = black_pawn.available_moves(board, row, column)
             expect(result).to eq([])
           end
         end
 
-        context 'when no forward space is available' do
+        context 'when no forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(false, false)
           end
 
-          it 'returns []' do
+          it 'returns empty array' do
             result = black_pawn.available_moves(board, row, column)
             expect(result).to eq([])
           end
@@ -173,24 +178,25 @@ RSpec.describe Pawn do
 
       context 'when pawn is not on starting row' do
         let(:row) { 4 }
+        let(:move1) { 'a4 - a3' }
 
-        context 'when a forward space is available' do
+        context 'when the first forward position is available' do
           before do
             allow(board).to receive(:empty?).and_return(true)
           end
 
-          it 'returns [[row+1, column]]' do
+          it 'returns the first move' do
             result = black_pawn.available_moves(board, row, column)
-            expect(result).to eq([[row + 1, column]])
+            expect(result).to eq([move1])
           end
         end
 
-        context 'when a forward space is not available' do
+        context 'when a forward position is not available' do
           before do
             allow(board).to receive(:empty?).and_return(false)
           end
 
-          it 'returns []' do
+          it 'returns empty array' do
             result = black_pawn.available_moves(board, row, column)
             expect(result).to eq([])
           end

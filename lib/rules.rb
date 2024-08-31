@@ -60,6 +60,8 @@ module Rules
     7 => 'h'
   }.freeze
 
+  PAWN_NOTATION = ''
+
   def self.out_of_bounds?(position)
     return true if position.length != 2
 
@@ -93,5 +95,11 @@ module Rules
     return if file.nil? || rank.nil?
 
     file + rank
+  end
+
+  def self.notate_move(piece_notation = PAWN_NOTATION, source_position, target_position)
+    return if source_position.nil? || target_position.nil?
+
+    "#{piece_notation}#{source_position} - #{target_position}"
   end
 end

@@ -21,23 +21,23 @@ class Pawn
 
   private
 
-  def forward_moves(board, row, column, moves = [])
-    next_row = forward_row(row)
-    position = Rules.row_column_to_position(next_row, column)
-    return moves unless position && board.empty?(position)
+  def forward_moves(board, row, column)
+    source_position = Rules.row_column_to_position(row, column)
+    return [] unless source_position
 
-    moves << [next_row, column]
-    return moves unless row == start_row
+    possible_moves(row, column).each_with_object([]) do |(r, c), moves|
+      target_position = Rules.row_column_to_position(r, c)
+      return moves unless target_position && board.empty?(target_position)
 
-    next_row = forward_row(next_row)
-    position = Rules.row_column_to_position(next_row, column)
-    return moves unless position && board.empty?(position)
-
-    moves << [next_row, column]
+      moves << Rules.notate_move(source_position, target_position)
+    end
   end
 
-  def forward_row(current_row)
-    color == Rules::WHITE ? current_row - 1 : current_row + 1
+  def possible_moves(row, column, moves = [])
+    moves << (color == Rules::WHITE ? [row - 1, column] : [row + 1, column])
+    return moves unless row == start_row
+
+    moves << (color == Rules::WHITE ? [row - 2, column] : [row + 2, column])
   end
 
   def start_row
