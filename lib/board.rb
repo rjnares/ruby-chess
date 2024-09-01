@@ -4,6 +4,7 @@ require 'colorize'
 
 require_relative 'rules'
 require_relative 'pawn'
+require_relative 'rook'
 
 # Class for a chess board
 class Board
@@ -13,8 +14,8 @@ class Board
     @last_move = nil
     @grid = Array.new(Rules::NUM_RANKS) { Array.new(Rules::NUM_FILES) }
 
-    create_pawns(@grid[Rules::WHITE_PAWNS_START_ROW], Rules::WHITE)
-    create_pawns(@grid[Rules::BLACK_PAWNS_START_ROW], Rules::BLACK)
+    create_pawns
+    create_rooks
   end
 
   def display
@@ -60,8 +61,18 @@ class Board
   attr_reader :grid
   attr_writer :last_move
 
-  def create_pawns(row, color)
-    row.each_index { |idx| row[idx] = Pawn.new(color) }
+  def create_rooks
+    grid[0][0] = Rook.new(Rules::BLACK)
+    grid[0][7] = Rook.new(Rules::BLACK)
+    grid[7][0] = Rook.new(Rules::WHITE)
+    grid[7][7] = Rook.new(Rules::WHITE)
+  end
+
+  def create_pawns
+    (0...Rules::NUM_FILES).each do |column_index|
+      grid[Rules::WHITE_PAWNS_START_ROW][column_index] = Pawn.new(Rules::WHITE)
+      grid[Rules::BLACK_PAWNS_START_ROW][column_index] = Pawn.new(Rules::BLACK)
+    end
   end
 
   def display_file_labels
