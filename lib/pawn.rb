@@ -18,8 +18,7 @@ class Pawn
   def available_moves(board, row, column)
     forward_moves(board, row, column) +
       regular_captures(board, row, column) +
-      en_passant_captures(board, row, column) +
-      promotions(board, row, column)
+      en_passant_captures(board, row, column)
   end
 
   private
@@ -42,11 +41,6 @@ class Pawn
     left_adjacent_position = Rules.row_column_to_position(row, column - 1)
     right_adjacent_position = Rules.row_column_to_position(row, column + 1)
     position == left_adjacent_position || position == right_adjacent_position
-  end
-
-  def promotions(board, row, column)
-    # TODO: Implement
-    []
   end
 
   def regular_captures(board, row, column)
@@ -75,7 +69,8 @@ class Pawn
       target_position = Rules.row_column_to_position(r, c)
       return moves if target_position.nil? || !board.empty?(target_position)
 
-      moves << Rules.notate_move(source_position, target_position)
+      moves << Rules.notate_pawn_promotion(source_position, target_position) if r == promotion_row
+      moves << Rules.notate_move(source_position, target_position) if r != promotion_row
     end
   end
 
@@ -88,5 +83,9 @@ class Pawn
 
   def start_row
     color == Rules::WHITE ? Rules::WHITE_PAWNS_START_ROW : Rules::BLACK_PAWNS_START_ROW
+  end
+
+  def promotion_row
+    color == Rules::WHITE ? Rules::WHITE_PAWNS_PROMOTION_ROW : Rules::BLACK_PAWNS_PROMOTION_ROW
   end
 end

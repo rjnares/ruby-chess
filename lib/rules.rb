@@ -13,6 +13,9 @@ module Rules
   WHITE_PAWNS_START_ROW = 6
   BLACK_PAWNS_START_ROW = 1
 
+  WHITE_PAWNS_PROMOTION_ROW = 0
+  BLACK_PAWNS_PROMOTION_ROW = 7
+
   WHITE = :gray
   BLACK = :black
 
@@ -114,6 +117,12 @@ module Rules
     return if file.nil? || rank.nil?
 
     file + rank
+  end
+
+  def self.notate_pawn_promotion(source_position, target_position)
+    return if source_position.nil? || target_position.nil?
+
+    "#{PAWN_NOTATION}#{source_position}-#{target_position}="
   end
 
   def self.notate_move(piece_notation = PAWN_NOTATION, source_position, target_position)

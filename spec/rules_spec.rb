@@ -125,6 +125,14 @@ RSpec.describe Rules do
     expect(described_class::PAWN_MOVE_POSITION_SKIP_MAP).to eq(expected)
   end
 
+  it 'returns white pawns promotion row' do
+    expect(described_class::WHITE_PAWNS_PROMOTION_ROW).to eq(0)
+  end
+
+  it 'returns black pawns promotion row' do
+    expect(described_class::BLACK_PAWNS_PROMOTION_ROW).to eq(7)
+  end
+
   describe '::out_of_bounds?' do
     context 'when position is not length 2' do
       let(:position) { 'aaa' }
@@ -258,6 +266,30 @@ RSpec.describe Rules do
         result = described_class.notate_move(source, nil)
         expect(result).to be_nil
       end
+    end
+  end
+
+  describe '::notate_pawn_promotion' do
+    let(:source) { 'source' }
+    let(:target) { 'target' }
+
+    context 'when source position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_pawn_promotion(nil, target)
+        expect(result).to be_nil
+      end
+    end
+
+    context 'when target position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_pawn_promotion(source, nil)
+        expect(result).to be_nil
+      end
+    end
+
+    it 'returns pawn promotion notation' do
+      result = described_class.notate_pawn_promotion(source, target)
+      expect(result).to eq("#{source}-#{target}=")
     end
   end
 

@@ -57,7 +57,6 @@ RSpec.describe Pawn do
         before do
           allow(white_pawn).to receive(:forward_moves).and_return([])
           allow(white_pawn).to receive(:regular_captures).and_return([])
-          allow(white_pawn).to receive(:promotions).and_return([])
         end
 
         context 'when source position does not exist' do
@@ -163,7 +162,6 @@ RSpec.describe Pawn do
         before do
           allow(white_pawn).to receive(:forward_moves).and_return([])
           allow(white_pawn).to receive(:en_passant_captures).and_return([])
-          allow(white_pawn).to receive(:promotions).and_return([])
           allow(board).to receive(:piece)
         end
 
@@ -212,7 +210,6 @@ RSpec.describe Pawn do
         before do
           allow(white_pawn).to receive(:regular_captures).and_return([])
           allow(white_pawn).to receive(:en_passant_captures).and_return([])
-          allow(white_pawn).to receive(:promotions).and_return([])
         end
 
         context 'when source position does not exist' do
@@ -300,6 +297,34 @@ RSpec.describe Pawn do
             end
           end
         end
+
+        context 'when pawn is one position away from promotion position' do
+          let(:row) { 1 }
+          let(:column) { 4 }
+
+          context 'when promotion position is not empty' do
+            before do
+              allow(board).to receive(:empty?).and_return(false)
+            end
+
+            it 'returns empty array' do
+              result = white_pawn.available_moves(board, row, column)
+              expect(result).to eq([])
+            end
+          end
+
+          context 'when promotion position is empty' do
+            let(:promotion_move) { 'e7-e8=' }
+            before do
+              allow(board).to receive(:empty?).and_return(true)
+            end
+
+            it 'returns promotion move' do
+              result = white_pawn.available_moves(board, row, column)
+              expect(result).to eq([promotion_move])
+            end
+          end
+        end
       end
     end
 
@@ -315,7 +340,6 @@ RSpec.describe Pawn do
         before do
           allow(black_pawn).to receive(:forward_moves).and_return([])
           allow(black_pawn).to receive(:regular_captures).and_return([])
-          allow(black_pawn).to receive(:promotions).and_return([])
         end
 
         context 'when source position does not exist' do
@@ -421,7 +445,6 @@ RSpec.describe Pawn do
         before do
           allow(black_pawn).to receive(:forward_moves).and_return([])
           allow(black_pawn).to receive(:en_passant_captures).and_return([])
-          allow(black_pawn).to receive(:promotions).and_return([])
           allow(board).to receive(:piece)
         end
 
@@ -470,7 +493,6 @@ RSpec.describe Pawn do
         before do
           allow(black_pawn).to receive(:regular_captures).and_return([])
           allow(black_pawn).to receive(:en_passant_captures).and_return([])
-          allow(black_pawn).to receive(:promotions).and_return([])
         end
 
         context 'when source position does not exist' do
@@ -555,6 +577,34 @@ RSpec.describe Pawn do
             it 'returns empty array' do
               result = black_pawn.available_moves(board, row, column)
               expect(result).to eq([])
+            end
+          end
+        end
+
+        context 'when pawn is one position away from promotion position' do
+          let(:row) { 6 }
+          let(:column) { 4 }
+
+          context 'when promotion position is not empty' do
+            before do
+              allow(board).to receive(:empty?).and_return(false)
+            end
+
+            it 'returns empty array' do
+              result = black_pawn.available_moves(board, row, column)
+              expect(result).to eq([])
+            end
+          end
+
+          context 'when promotion position is empty' do
+            let(:promotion_move) { 'e2-e1=' }
+            before do
+              allow(board).to receive(:empty?).and_return(true)
+            end
+
+            it 'returns promotion move' do
+              result = black_pawn.available_moves(board, row, column)
+              expect(result).to eq([promotion_move])
             end
           end
         end
