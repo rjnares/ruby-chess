@@ -6,7 +6,6 @@ RSpec.describe Pawn do
   let(:board) { instance_double('Board') }
   let(:white_pawn) { described_class.new(:gray) }
   let(:black_pawn) { described_class.new(:black) }
-  let(:rules) { class_double('Rules').as_stubbed_const(transfer_nested_constants: true) }
 
   it 'has the pawn unicode constant' do
     expect(described_class::UNICODE).to eq("\u265F")
@@ -47,6 +46,114 @@ RSpec.describe Pawn do
 
   describe '#available_moves' do
     context 'when pawn is white' do
+      context 'when pawn is capturing en passant' do
+        let(:row) { 3 }
+        let(:column) { 3 }
+        let(:last_move_left) { 'c7-c5' }
+        let(:last_move_right) { 'e7-e5' }
+        let(:left_capture) { 'd5xc6ep' }
+        let(:right_capture) { 'd5xe6ep' }
+
+        before do
+          allow(white_pawn).to receive(:forward_moves).and_return([])
+          allow(white_pawn).to receive(:regular_captures).and_return([])
+          allow(white_pawn).to receive(:promotions).and_return([])
+        end
+
+        context 'when source position does not exist' do
+          before do
+            allow(board).to receive(:last_move)
+          end
+
+          it 'returns empty array' do
+            result = white_pawn.available_moves(board, -1, -1)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when target position does not exist' do
+          before do
+            allow(board).to receive(:last_move)
+          end
+
+          it 'returns empty array' do
+            result = white_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when target position on board is not empty' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(false)
+          end
+
+          it 'returns empty array' do
+            result = white_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when landing piece is not enemy' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(white_pawn).to receive(:enemy?).and_return(false)
+          end
+
+          it 'returns empty array' do
+            result = white_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when last move landing position is not adjacent to current position' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(white_pawn).to receive(:enemy?).and_return(true)
+            allow(white_pawn).to receive(:adjacent?).and_return(false)
+          end
+
+          it 'returns empty array' do
+            result = white_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when last move landing position is left adjacent to current position' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(white_pawn).to receive(:enemy?).and_return(true)
+            allow(white_pawn).to receive(:adjacent?).and_return(true)
+          end
+
+          it 'returns left diagonal capture en passant' do
+            result = white_pawn.available_moves(board, row, column)
+            expect(result).to eq([left_capture])
+          end
+        end
+
+        context 'when last move landing position is right adjacent to current position' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_right)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(white_pawn).to receive(:enemy?).and_return(true)
+            allow(white_pawn).to receive(:adjacent?).and_return(true)
+          end
+
+          it 'returns left diagonal capture en passant' do
+            result = white_pawn.available_moves(board, row, column)
+            expect(result).to eq([right_capture])
+          end
+        end
+      end
+
       context 'when pawn is capturing' do
         let(:row) { 2 }
         let(:column) { 4 }
@@ -61,12 +168,8 @@ RSpec.describe Pawn do
         end
 
         context 'when source position does not exist' do
-          before do
-            allow(rules).to receive(:row_column_to_position).and_return(nil)
-          end
-
           it 'returns empty array' do
-            result = white_pawn.available_moves(board, row, column)
+            result = white_pawn.available_moves(board, -1, -1)
             expect(result).to eq([])
           end
         end
@@ -113,10 +216,6 @@ RSpec.describe Pawn do
         end
 
         context 'when source position does not exist' do
-          before do
-            allow(rules).to receive(:row_column_to_position).and_return(nil)
-          end
-
           it 'returns empty array' do
             result = white_pawn.available_moves(board, -1, -1)
             expect(result).to eq([])
@@ -205,6 +304,114 @@ RSpec.describe Pawn do
     end
 
     context 'when pawn is black' do
+      context 'when pawn is capturing en passant' do
+        let(:row) { 4 }
+        let(:column) { 3 }
+        let(:last_move_left) { 'c2-c4' }
+        let(:last_move_right) { 'e2-e4' }
+        let(:left_capture) { 'd4xc3ep' }
+        let(:right_capture) { 'd4xe3ep' }
+
+        before do
+          allow(black_pawn).to receive(:forward_moves).and_return([])
+          allow(black_pawn).to receive(:regular_captures).and_return([])
+          allow(black_pawn).to receive(:promotions).and_return([])
+        end
+
+        context 'when source position does not exist' do
+          before do
+            allow(board).to receive(:last_move)
+          end
+
+          it 'returns empty array' do
+            result = black_pawn.available_moves(board, -1, -1)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when target position does not exist' do
+          before do
+            allow(board).to receive(:last_move)
+          end
+
+          it 'returns empty array' do
+            result = black_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when target position on board is not empty' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(false)
+          end
+
+          it 'returns empty array' do
+            result = black_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when landing piece is not enemy' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(black_pawn).to receive(:enemy?).and_return(false)
+          end
+
+          it 'returns empty array' do
+            result = black_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when last move landing position is not adjacent to current position' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(black_pawn).to receive(:enemy?).and_return(true)
+            allow(black_pawn).to receive(:adjacent?).and_return(false)
+          end
+
+          it 'returns empty array' do
+            result = black_pawn.available_moves(board, row, column)
+            expect(result).to eq([])
+          end
+        end
+
+        context 'when last move landing position is left adjacent to current position' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_left)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(black_pawn).to receive(:enemy?).and_return(true)
+            allow(black_pawn).to receive(:adjacent?).and_return(true)
+          end
+
+          it 'returns left diagonal capture en passant' do
+            result = black_pawn.available_moves(board, row, column)
+            expect(result).to eq([left_capture])
+          end
+        end
+
+        context 'when last move landing position is right adjacent to current position' do
+          before do
+            allow(board).to receive(:last_move).and_return(last_move_right)
+            allow(board).to receive(:empty?).and_return(true)
+            allow(board).to receive(:piece)
+            allow(black_pawn).to receive(:enemy?).and_return(true)
+            allow(black_pawn).to receive(:adjacent?).and_return(true)
+          end
+
+          it 'returns left diagonal capture en passant' do
+            result = black_pawn.available_moves(board, row, column)
+            expect(result).to eq([right_capture])
+          end
+        end
+      end
+
       context 'when pawn is capturing' do
         let(:row) { 2 }
         let(:column) { 4 }
@@ -219,12 +426,8 @@ RSpec.describe Pawn do
         end
 
         context 'when source position does not exist' do
-          before do
-            allow(rules).to receive(:row_column_to_position).and_return(nil)
-          end
-
           it 'returns empty array' do
-            result = black_pawn.available_moves(board, row, column)
+            result = black_pawn.available_moves(board, -1, -1)
             expect(result).to eq([])
           end
         end
@@ -271,10 +474,6 @@ RSpec.describe Pawn do
         end
 
         context 'when source position does not exist' do
-          before do
-            allow(rules).to receive(:row_column_to_position).and_return(nil)
-          end
-
           it 'returns empty array' do
             result = black_pawn.available_moves(board, -1, -1)
             expect(result).to eq([])

@@ -16,6 +16,10 @@ RSpec.describe Board do
       expect(grid.all? { |row| row.length == 8 }).to eq(true)
     end
 
+    it 'sets last move instance variable to nil' do
+      expect(board.instance_variable_get(:@last_moved)).to be_nil
+    end
+
     context 'when pawns are created' do
       it 'adds black pawns to row 1' do
         result = grid[1].all? do |val|
@@ -30,6 +34,18 @@ RSpec.describe Board do
         end
         expect(result).to eq(true)
       end
+    end
+  end
+
+  describe '#last_move' do
+    let(:my_value) { 'my value' }
+
+    before do
+      board.instance_variable_set(:@last_move, my_value)
+    end
+
+    it 'returns the value of the last move instance variable' do
+      expect(board.instance_variable_get(:@last_move)).to eq(my_value)
     end
   end
 

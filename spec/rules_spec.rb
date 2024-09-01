@@ -103,6 +103,28 @@ RSpec.describe Rules do
     expect(described_class::PAWN_NOTATION).to eq('')
   end
 
+  it 'returns mappings for moves where pawn skips a position' do
+    expected = {
+      'a7-a5' => 'a6',
+      'b7-b5' => 'b6',
+      'c7-c5' => 'c6',
+      'd7-d5' => 'd6',
+      'e7-e5' => 'e6',
+      'f7-f5' => 'f6',
+      'g7-g5' => 'g6',
+      'h7-h5' => 'h6',
+      'a2-a4' => 'a3',
+      'b2-b4' => 'b3',
+      'c2-c4' => 'c3',
+      'd2-d4' => 'd3',
+      'e2-e4' => 'e3',
+      'f2-f4' => 'f3',
+      'g2-g4' => 'g3',
+      'h2-h4' => 'h3'
+    }
+    expect(described_class::PAWN_MOVE_POSITION_SKIP_MAP).to eq(expected)
+  end
+
   describe '::out_of_bounds?' do
     context 'when position is not length 2' do
       let(:position) { 'aaa' }
@@ -270,6 +292,72 @@ RSpec.describe Rules do
       it 'returns nil' do
         result = described_class.notate_capture(source, nil)
         expect(result).to be_nil
+      end
+    end
+  end
+
+  describe '::notate_en_passant_capture' do
+    let(:source) { 'source' }
+    let(:target) { 'target' }
+
+    context 'when piece notation is not passed' do
+      it 'defaults to pawn notation' do
+        result = described_class.notate_en_passant_capture(source, target)
+        expect(result).to eq("#{source}x#{target}ep")
+      end
+    end
+
+    context 'when piece notation is passed' do
+      let(:piece_notation) { 'piece notation' }
+
+      it 'uses the piece notation' do
+        result = described_class.notate_en_passant_capture(piece_notation, source, target)
+        expect(result).to eq("#{piece_notation}#{source}x#{target}ep")
+      end
+    end
+
+    context 'when source position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_en_passant_capture(nil, target)
+        expect(result).to be_nil
+      end
+    end
+
+    context 'when target position is nil' do
+      it 'returns nil' do
+        result = described_class.notate_en_passant_capture(source, nil)
+        expect(result).to be_nil
+      end
+    end
+  end
+
+  describe '::parse_move_landing_position' do
+    let(:move) { 'a7-a5' }
+    let(:landing_position) { 'a5' }
+
+    context 'when move is nil' do
+      it 'returns nil' do
+        expect(described_class.parse_move_landing_position(nil)).to be_nil
+      end
+    end
+
+    context 'when move landing position is out of bounds' do
+      before do
+        allow(described_class).to receive(:out_of_bounds?).and_return(true)
+      end
+
+      it 'returns nil' do
+        expect(described_class.parse_move_landing_position(move)).to be_nil
+      end
+    end
+
+    context 'when move landing position is in bounds' do
+      before do
+        allow(described_class).to receive(:out_of_bounds?).and_return(false)
+      end
+
+      it 'returns landing position' do
+        expect(described_class.parse_move_landing_position(move)).to eq(landing_position)
       end
     end
   end

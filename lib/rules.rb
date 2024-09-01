@@ -62,8 +62,27 @@ module Rules
 
   PAWN_NOTATION = ''
 
+  PAWN_MOVE_POSITION_SKIP_MAP = {
+    'a7-a5' => 'a6',
+    'b7-b5' => 'b6',
+    'c7-c5' => 'c6',
+    'd7-d5' => 'd6',
+    'e7-e5' => 'e6',
+    'f7-f5' => 'f6',
+    'g7-g5' => 'g6',
+    'h7-h5' => 'h6',
+    'a2-a4' => 'a3',
+    'b2-b4' => 'b3',
+    'c2-c4' => 'c3',
+    'd2-d4' => 'd3',
+    'e2-e4' => 'e3',
+    'f2-f4' => 'f3',
+    'g2-g4' => 'g3',
+    'h2-h4' => 'h3'
+  }.freeze
+
   def self.out_of_bounds?(position)
-    return true if position.length != 2
+    return true if position&.length != 2
 
     file = position[0]
     rank = position[1]
@@ -75,7 +94,7 @@ module Rules
   end
 
   def self.position_to_row_column(position)
-    return if position.length != 2
+    return if position&.length != 2
 
     file = position[0]
     rank = position[1]
@@ -107,5 +126,20 @@ module Rules
     return if source_position.nil? || target_position.nil?
 
     "#{piece_notation}#{source_position}x#{target_position}"
+  end
+
+  def self.notate_en_passant_capture(piece_notation = PAWN_NOTATION, source_position, target_position)
+    return if source_position.nil? || target_position.nil?
+
+    "#{piece_notation}#{source_position}x#{target_position}ep"
+  end
+
+  def self.parse_move_landing_position(move)
+    return if move.nil?
+
+    position = move[-2..] || ''
+    return if out_of_bounds?(position)
+
+    position
   end
 end
