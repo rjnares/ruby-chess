@@ -5,6 +5,7 @@ require 'colorize'
 require_relative 'rules'
 require_relative 'pawn'
 require_relative 'rook'
+require_relative 'king'
 
 # Class for a chess board
 class Board
@@ -16,6 +17,7 @@ class Board
 
     create_pawns
     create_rooks
+    create_kings
   end
 
   def display
@@ -60,6 +62,11 @@ class Board
 
   attr_reader :grid
   attr_writer :last_move
+
+  def create_kings
+    grid[7][4] = King.new(Rules::WHITE)
+    grid[0][4] = King.new(Rules::BLACK)
+  end
 
   def create_rooks
     grid[0][0] = Rook.new(Rules::BLACK)
