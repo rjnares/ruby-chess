@@ -35,6 +35,28 @@ RSpec.describe Board do
         expect(result).to eq(true)
       end
     end
+
+    context 'when rooks are created' do
+      it 'adds white rook to row 7, column 0' do
+        result = grid[7][0].instance_of?(Rook) && grid[7][0].color == rules::WHITE
+        expect(result).to eq(true)
+      end
+
+      it 'adds white rook to row 7, column 7' do
+        result = grid[7][7].instance_of?(Rook) && grid[7][7].color == rules::WHITE
+        expect(result).to eq(true)
+      end
+
+      it 'adds black rook to row 0, column 0' do
+        result = grid[0][0].instance_of?(Rook) && grid[0][0].color == rules::BLACK
+        expect(result).to eq(true)
+      end
+
+      it 'adds black rook to row 0, column 7' do
+        result = grid[0][7].instance_of?(Rook) && grid[0][7].color == rules::BLACK
+        expect(result).to eq(true)
+      end
+    end
   end
 
   describe '#last_move' do
