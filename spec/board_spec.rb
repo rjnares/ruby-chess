@@ -91,6 +91,28 @@ RSpec.describe Board do
         expect(result).to eq(true)
       end
     end
+
+    context 'when bishops are created' do
+      it 'adds white bishop to row 7, column 2' do
+        result = grid[7][2].instance_of?(Bishop) && grid[7][2].color == rules::WHITE
+        expect(result).to eq(true)
+      end
+
+      it 'adds white bishop to row 7, column 5' do
+        result = grid[7][5].instance_of?(Bishop) && grid[7][5].color == rules::WHITE
+        expect(result).to eq(true)
+      end
+
+      it 'adds black bishop to row 0, column 2' do
+        result = grid[0][2].instance_of?(Bishop) && grid[0][2].color == rules::BLACK
+        expect(result).to eq(true)
+      end
+
+      it 'adds black bishop to row 0, column 5' do
+        result = grid[0][5].instance_of?(Bishop) && grid[0][5].color == rules::BLACK
+        expect(result).to eq(true)
+      end
+    end
   end
 
   describe '#last_move' do
