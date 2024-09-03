@@ -64,6 +64,7 @@ module Rules
   }.freeze
 
   PAWN_NOTATION = ''
+  ROOK_NOTATION = 'R'
 
   PAWN_MOVE_POSITION_SKIP_MAP = {
     'a7-a5' => 'a6',
