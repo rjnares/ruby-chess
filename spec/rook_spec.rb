@@ -12,6 +12,20 @@ RSpec.describe Rook do
     expect(described_class::UNICODE).to eq("\u265C")
   end
 
+  describe '#color' do
+    context 'when rook is white' do
+      it 'returns white' do
+        expect(white_rook.color).to eq(:white)
+      end
+    end
+
+    context 'when rook is black' do
+      it 'returns black' do
+        expect(black_rook.color).to eq(:black)
+      end
+    end
+  end
+
   describe '#initialize' do
     let(:expected_color) { 'expected_color' }
     subject(:rook) { described_class.new(expected_color) }
