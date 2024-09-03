@@ -69,6 +69,28 @@ RSpec.describe Board do
         expect(result).to eq(true)
       end
     end
+
+    context 'when knights are created' do
+      it 'adds white knight to row 7, column 1' do
+        result = grid[7][1].instance_of?(Knight) && grid[7][1].color == rules::WHITE
+        expect(result).to eq(true)
+      end
+
+      it 'adds white knight to row 7, column 6' do
+        result = grid[7][6].instance_of?(Knight) && grid[7][6].color == rules::WHITE
+        expect(result).to eq(true)
+      end
+
+      it 'adds black knight to row 0, column 1' do
+        result = grid[0][1].instance_of?(Knight) && grid[0][1].color == rules::BLACK
+        expect(result).to eq(true)
+      end
+
+      it 'adds black knight to row 0, column 6' do
+        result = grid[0][6].instance_of?(Knight) && grid[0][6].color == rules::BLACK
+        expect(result).to eq(true)
+      end
+    end
   end
 
   describe '#last_move' do

@@ -66,6 +66,7 @@ module Rules
   PAWN_NOTATION = ''
   ROOK_NOTATION = 'R'
   KING_NOTATION = 'K'
+  KNIGHT_NOTATION = 'N'
 
   PAWN_MOVE_POSITION_SKIP_MAP = {
     'a7-a5' => 'a6',
