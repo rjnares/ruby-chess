@@ -287,9 +287,18 @@ RSpec.describe Rules do
       end
     end
 
-    it 'returns pawn promotion notation' do
-      result = described_class.notate_pawn_promotion(source, target)
-      expect(result).to eq("#{source}-#{target}=")
+    context 'when capture is true' do
+      it 'returns a capture promotion' do
+        result = described_class.notate_pawn_promotion(source, target)
+        expect(result).to eq("#{source}-#{target}=")
+      end
+    end
+
+    context 'when capture is false' do
+      it 'returns a move promotion' do
+        result = described_class.notate_pawn_promotion(source, target, capture: true)
+        expect(result).to eq("#{source}x#{target}=")
+      end
     end
   end
 

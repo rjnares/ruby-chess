@@ -124,10 +124,11 @@ module Rules
     file + rank
   end
 
-  def self.notate_pawn_promotion(source_position, target_position)
+  def self.notate_pawn_promotion(source_position, target_position, capture: false)
     return if source_position.nil? || target_position.nil?
 
-    "#{PAWN_NOTATION}#{source_position}-#{target_position}="
+    action = capture ? 'x' : '-'
+    "#{PAWN_NOTATION}#{source_position}#{action}#{target_position}="
   end
 
   def self.notate_move(piece_notation = PAWN_NOTATION, source_position, target_position)

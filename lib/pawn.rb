@@ -16,17 +16,19 @@ class Pawn
   end
 
   def available_moves(board, row, column)
-    forward_moves(board, row, column) +
-      regular_captures(board, row, column) +
-      en_passant_captures(board, row, column)
+    source_position = Rules.row_column_to_position(row, column)
+    return [] if source_position.nil?
+
+    forward_moves(source_position, board, row, column) +
+      regular_captures(source_position, board, row, column) +
+      en_passant_captures(source_position, board, row, column)
   end
 
   private
 
-  def en_passant_captures(board, row, column, captures = [])
-    source_position = Rules.row_column_to_position(row, column)
+  def en_passant_captures(source_position, board, row, column, captures = [])
     target_position = Rules::PAWN_MOVE_POSITION_SKIP_MAP[board.last_move]
-    return captures if source_position.nil? || target_position.nil? || !board.empty?(target_position)
+    return captures if target_position.nil? || !board.empty?(target_position)
 
     landing_position = Rules.parse_move_landing_position(board.last_move)
     landing_piece = board.piece(landing_position)
@@ -43,15 +45,16 @@ class Pawn
     position == left_adjacent_position || position == right_adjacent_position
   end
 
-  def regular_captures(board, row, column)
-    source_position = Rules.row_column_to_position(row, column)
-    return [] if source_position.nil?
-
+  def regular_captures(source_position, board, row, column)
     possible_regular_captures(row, column).each_with_object([]) do |(r, c), captures|
       target_position = Rules.row_column_to_position(r, c)
       next if target_position.nil? || !enemy?(board.piece(target_position))
 
-      captures << Rules.notate_capture(source_position, target_position)
+      captures << if r == promotion_row
+                    Rules.notate_pawn_promotion(source_position, target_position, capture: true)
+                  else
+                    Rules.notate_capture(source_position, target_position)
+                  end
     end
   end
 
@@ -61,16 +64,16 @@ class Pawn
     [[row + 1, column - 1], [row + 1, column + 1]]
   end
 
-  def forward_moves(board, row, column)
-    source_position = Rules.row_column_to_position(row, column)
-    return [] if source_position.nil?
-
+  def forward_moves(source_position, board, row, column)
     possible_moves(row, column).each_with_object([]) do |(r, c), moves|
       target_position = Rules.row_column_to_position(r, c)
       return moves if target_position.nil? || !board.empty?(target_position)
 
-      moves << Rules.notate_pawn_promotion(source_position, target_position) if r == promotion_row
-      moves << Rules.notate_move(source_position, target_position) if r != promotion_row
+      moves << if r == promotion_row
+                 Rules.notate_pawn_promotion(source_position, target_position)
+               else
+                 Rules.notate_move(source_position, target_position)
+               end
     end
   end
 

@@ -46,6 +46,38 @@ RSpec.describe Pawn do
 
   describe '#available_moves' do
     context 'when pawn is white' do
+      context 'when source position is nil' do
+        it 'returns empty array' do
+          expect(white_pawn.available_moves(board, -1, -1)).to eq([])
+        end
+      end
+
+      context 'when source position is NOT nil' do
+        let(:row) { 2 }
+        let(:column) { 3 }
+
+        before do
+          allow(white_pawn).to receive(:forward_moves).and_return([])
+          allow(white_pawn).to receive(:regular_captures).and_return([])
+          allow(white_pawn).to receive(:en_passant_captures).and_return([])
+        end
+
+        it 'calls #forward_moves once' do
+          expect(white_pawn).to receive(:forward_moves).once
+          white_pawn.available_moves(board, row, column)
+        end
+
+        it 'calls #regular_captures once' do
+          expect(white_pawn).to receive(:regular_captures).once
+          white_pawn.available_moves(board, row, column)
+        end
+
+        it 'calls #en_passant_captures once' do
+          expect(white_pawn).to receive(:en_passant_captures).once
+          white_pawn.available_moves(board, row, column)
+        end
+      end
+
       context 'when pawn is capturing en passant' do
         let(:row) { 3 }
         let(:column) { 3 }
@@ -329,6 +361,38 @@ RSpec.describe Pawn do
     end
 
     context 'when pawn is black' do
+      context 'when source position is nil' do
+        it 'returns empty array' do
+          expect(black_pawn.available_moves(board, -1, -1)).to eq([])
+        end
+      end
+
+      context 'when source position is NOT nil' do
+        let(:row) { 2 }
+        let(:column) { 3 }
+
+        before do
+          allow(black_pawn).to receive(:forward_moves).and_return([])
+          allow(black_pawn).to receive(:regular_captures).and_return([])
+          allow(black_pawn).to receive(:en_passant_captures).and_return([])
+        end
+
+        it 'calls #forward_moves once' do
+          expect(black_pawn).to receive(:forward_moves).once
+          black_pawn.available_moves(board, row, column)
+        end
+
+        it 'calls #regular_captures once' do
+          expect(black_pawn).to receive(:regular_captures).once
+          black_pawn.available_moves(board, row, column)
+        end
+
+        it 'calls #en_passant_captures once' do
+          expect(black_pawn).to receive(:en_passant_captures).once
+          black_pawn.available_moves(board, row, column)
+        end
+      end
+
       context 'when pawn is capturing en passant' do
         let(:row) { 4 }
         let(:column) { 3 }
