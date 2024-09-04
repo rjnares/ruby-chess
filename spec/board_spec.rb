@@ -70,6 +70,18 @@ RSpec.describe Board do
       end
     end
 
+    context 'when queens are created' do
+      it 'adds white queen to row 7, column 3' do
+        result = grid[7][3].instance_of?(Queen) && grid[7][3].color == rules::WHITE
+        expect(result).to eq(true)
+      end
+
+      it 'adds black queen to row 0, column 3' do
+        result = grid[0][3].instance_of?(Queen) && grid[0][3].color == rules::BLACK
+        expect(result).to eq(true)
+      end
+    end
+
     context 'when knights are created' do
       it 'adds white knight to row 7, column 1' do
         result = grid[7][1].instance_of?(Knight) && grid[7][1].color == rules::WHITE
